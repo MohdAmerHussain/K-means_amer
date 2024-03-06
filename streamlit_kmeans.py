@@ -30,7 +30,7 @@ def main():
 
 
     # Define the file path of the image
-    logo_path = r"c:\Users\mohda\Downloads\innologo.png"
+    logo_path = r"innologo.png"
 
     # Display the logo using PIL and Streamlit
     image = Image.open(logo_path)
