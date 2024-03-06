@@ -12,15 +12,15 @@ imp_enc_scale = joblib.load('imp_enc_scale')
 outlier = joblib.load('winsor')
 
 
-def predict(data, user, pw, db):
-    engine = create_engine(f"mysql+pymysql://{user}:%s@localhost/{db}" % quote(f'{pw}'))
+def predict(data):
+    # engine = create_engine(f"mysql+pymysql://{user}:%s@localhost/{db}" % quote(f'{pw}'))
     univ_df = data.drop(["UnivID", "Univ"], axis = 1)
     data1 = pd.DataFrame(imp_enc_scale.transform(univ_df), columns = imp_enc_scale.get_feature_names_out())
     data1[list(data1.iloc[:, -6:].columns)] = outlier.transform(data1[list(data1.iloc[:, -6:].columns)])
     prediction = pd.DataFrame(model.predict(data1), columns = ['cluster_id'])
     prediction = pd.concat([prediction, data], axis = 1)
     
-    prediction.to_sql('university_pred_kmeans', con = engine, if_exists = 'replace', chunksize = 1000, index = False)
+    # prediction.to_sql('university_pred_kmeans', con = engine, if_exists = 'replace', chunksize = 1000, index = False)
     return prediction
 
 
@@ -63,7 +63,7 @@ def main():
     else:
         st.sidebar.warning("You need to upload a csv or excel file.")
     
-    html_temp = """
+    '''html_temp = """
     <div style="background-color:tomato;padding:10px">
     <p style="color:white;text-align:center;">Add DataBase Credientials </p>
     </div>
@@ -73,11 +73,12 @@ def main():
     user = st.sidebar.text_input("user", "")
     pw = st.sidebar.text_input("password", "", type="password")
     db = st.sidebar.text_input("database", "")
+    '''
     
     result = ""
     
     if st.button("Predict"):
-        result = predict(data, user, pw, db)
+        result = predict(data)
                                    
         import seaborn as sns
         cm = sns.light_palette("blue", as_cmap = True)
