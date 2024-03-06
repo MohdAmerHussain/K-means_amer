@@ -7,7 +7,7 @@ import pickle, joblib
 from PIL import Image
 
 # Load the saved model
-model = pickle.load(open('clust_UNIV.pkl', 'rb'))
+model = pickle.load(open('Clust_Univ.pkl', 'rb'))
 imp_enc_scale = joblib.load('imp_enc_scale')
 outlier = joblib.load('winsor')
 
